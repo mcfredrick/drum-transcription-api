@@ -149,7 +149,10 @@ class DrumTranscriber:
             List of (time, drum_name, velocity) tuples
         """
         onsets = []
-        frame_rate = 22050 / 512  # ~43 FPS
+        # Model output frame rate accounts for 8x pooling reduction
+        input_frame_rate = 22050 / 512  # ~43 FPS (input spectrogram)
+        pooling_reduction = 8  # 2^3 from three pooling layers
+        frame_rate = input_frame_rate / pooling_reduction  # ~5.38 FPS (model output)
         min_distance_frames = int(min_interval * frame_rate)
         
         drum_names = ['kick', 'snare', 'hihat', 'hi_tom', 'mid_tom', 'low_tom', 'crash', 'ride']
@@ -199,7 +202,7 @@ class DrumTranscriber:
             drums = pretty_midi.Instrument(program=0, is_drum=True)
             
             # Add notes
-            for time, drum_name, velocity in onsets:
+            for i, (time, drum_name, velocity) in enumerate(onsets):
                 if use_alternative_notes:
                     # Randomly select from available notes for variety
                     import random
@@ -208,11 +211,15 @@ class DrumTranscriber:
                     # Use default (first) note
                     note_number = DEFAULT_DRUM_MAP[drum_name]
                 
+                # Use appropriate drum hit duration (short, percussive)
+                # Drums are typically short hits, not sustained notes
+                duration = 0.05  # 50ms - typical drum hit duration
+                
                 note = pretty_midi.Note(
                     velocity=velocity,
                     pitch=note_number,
                     start=time,
-                    end=time + 0.1  # 100ms duration
+                    end=time + duration
                 )
                 drums.notes.append(note)
             
@@ -231,7 +238,8 @@ class DrumTranscriber:
         threshold: float = 0.5,
         min_interval: float = 0.05,
         tempo: int = 120,
-        use_alternative_notes: bool = False
+        use_alternative_notes: bool = False,
+        export_predictions: bool = False
     ) -> Dict:
         """
         Complete pipeline: audio file → MIDI file.
@@ -243,6 +251,7 @@ class DrumTranscriber:
             min_interval: Minimum time between onsets (seconds)
             tempo: BPM for output MIDI
             use_alternative_notes: Use alternative MIDI notes for variety
+            export_predictions: Export raw model predictions for debugging
         
         Returns:
             Dictionary with statistics
@@ -250,6 +259,10 @@ class DrumTranscriber:
         try:
             # Run inference
             predictions = self.transcribe_drums(audio_path)
+            
+            # Export predictions for debugging if requested
+            if export_predictions:
+                self._export_predictions(audio_path, predictions)
             
             # Extract onsets
             onsets = self.extract_onsets(predictions, threshold, min_interval)
@@ -266,9 +279,79 @@ class DrumTranscriber:
             return {
                 'total_hits': len(onsets),
                 'per_drum': stats,
-                'duration': predictions.shape[0] / (22050 / 512),  # seconds
+                'duration': predictions.shape[0] / ((22050 / 512) / 8),  # Use output frame rate
                 'onsets': onsets
             }
         except Exception as e:
             logger.error(f"Transcription failed: {e}")
             raise
+    
+    def _export_predictions(self, audio_path: str, predictions: np.ndarray):
+        """
+        Export raw model predictions for debugging.
+        
+        Args:
+            audio_path: Path to input audio file
+            predictions: Raw model predictions (time, n_classes)
+        """
+        try:
+            import json
+            from pathlib import Path
+            
+            # Create output directory
+            audio_file = Path(audio_path)
+            output_dir = audio_file.parent
+            base_name = audio_file.stem
+            
+            # Save raw predictions as numpy
+            predictions_file = output_dir / f"{base_name}_predictions.npy"
+            np.save(predictions_file, predictions)
+            
+            # Save as JSON for easier inspection
+            drum_names = ['kick', 'snare', 'hihat', 'hi_tom', 'mid_tom', 'low_tom', 'crash', 'ride']
+            frame_rate = (22050 / 512) / 8  # Output frame rate
+            
+            predictions_data = {
+                'audio_file': str(audio_path),
+                'predictions_shape': predictions.shape,
+                'frame_rate': frame_rate,
+                'duration_seconds': predictions.shape[0] / frame_rate,
+                'drum_names': drum_names,
+                'statistics': {}
+            }
+            
+            # Add statistics for each drum
+            for i, drum in enumerate(drum_names):
+                class_preds = predictions[:, i]
+                predictions_data['statistics'][drum] = {
+                    'min': float(class_preds.min()),
+                    'max': float(class_preds.max()),
+                    'mean': float(class_preds.mean()),
+                    'frames_above_0.5': int((class_preds > 0.5).sum()),
+                    'frames_above_0.7': int((class_preds > 0.7).sum()),
+                    'frames_above_0.9': int((class_preds > 0.9).sum())
+                }
+            
+            # Save sample of predictions (first 100 frames)
+            predictions_data['sample_predictions'] = []
+            sample_size = min(100, predictions.shape[0])
+            for t in range(sample_size):
+                time_sec = t / frame_rate
+                frame_data = {
+                    'time': time_sec,
+                    'frame': t,
+                    'predictions': {}
+                }
+                for i, drum in enumerate(drum_names):
+                    frame_data['predictions'][drum] = float(predictions[t, i])
+                predictions_data['sample_predictions'].append(frame_data)
+            
+            # Save JSON
+            json_file = output_dir / f"{base_name}_predictions.json"
+            with open(json_file, 'w') as f:
+                json.dump(predictions_data, f, indent=2)
+            
+            logger.info(f"Predictions exported: {predictions_file}, {json_file}")
+            
+        except Exception as e:
+            logger.warning(f"Failed to export predictions: {e}")

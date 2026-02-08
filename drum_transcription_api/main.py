@@ -74,7 +74,8 @@ async def transcribe_audio(
     threshold: float = Query(0.5, ge=0.1, le=1.0, description="Onset detection threshold"),
     min_interval: float = Query(0.05, ge=0.01, le=0.5, description="Minimum time between onsets (seconds)"),
     tempo: int = Query(120, ge=60, le=200, description="Output MIDI tempo (BPM)"),
-    use_alternative_notes: bool = Query(False, description="Use alternative MIDI notes for variety")
+    use_alternative_notes: bool = Query(False, description="Use alternative MIDI notes for variety"),
+    export_predictions: bool = Query(False, description="Export raw model predictions for debugging")
 ):
     """
     Transcribe drum audio to MIDI.
@@ -114,7 +115,8 @@ async def transcribe_audio(
             threshold=threshold,
             min_interval=min_interval,
             tempo=tempo,
-            use_alternative_notes=use_alternative_notes
+            use_alternative_notes=use_alternative_notes,
+            export_predictions=export_predictions
         )
         
         # Generate download URL
