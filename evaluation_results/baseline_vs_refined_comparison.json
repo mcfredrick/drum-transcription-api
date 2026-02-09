@@ -1,0 +1,249 @@
+{
+  "baseline": {
+    "per_class": {
+      "snare_head": {
+        "tp": 5324,
+        "fp": 240,
+        "fn": 2165,
+        "timing_errors": [],
+        "precision": 0.9568655643421998,
+        "recall": 0.7109093336894111,
+        "f1_score": 0.8157511683137976
+      },
+      "high_mid_tom": {
+        "tp": 1939,
+        "fp": 60,
+        "fn": 209,
+        "timing_errors": [],
+        "precision": 0.9699849924962481,
+        "recall": 0.9027001862197392,
+        "f1_score": 0.9351338316855557
+      },
+      "floor_tom": {
+        "tp": 2821,
+        "fp": 116,
+        "fn": 566,
+        "timing_errors": [],
+        "precision": 0.9605039155600953,
+        "recall": 0.8328904635370534,
+        "f1_score": 0.892156862745098
+      },
+      "kick": {
+        "tp": 8586,
+        "fp": 41,
+        "fn": 183,
+        "timing_errors": [],
+        "precision": 0.9952474788454851,
+        "recall": 0.9791310297639412,
+        "f1_score": 0.9871234766613014
+      },
+      "snare_rim": {
+        "tp": 2449,
+        "fp": 1996,
+        "fn": 205,
+        "timing_errors": [],
+        "precision": 0.5509561304836895,
+        "recall": 0.9227581009796534,
+        "f1_score": 0.6899563318777293
+      },
+      "ride": {
+        "tp": 3110,
+        "fp": 53,
+        "fn": 656,
+        "timing_errors": [],
+        "precision": 0.9832437559279166,
+        "recall": 0.8258098778544876,
+        "f1_score": 0.8976764323856257
+      },
+      "crash": {
+        "tp": 191,
+        "fp": 327,
+        "fn": 3,
+        "timing_errors": [],
+        "precision": 0.3687258687258687,
+        "recall": 0.9845360824742269,
+        "f1_score": 0.5365168539325842
+      },
+      "hihat_pedal": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4356,
+        "timing_errors": [],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0
+      },
+      "hihat_closed": {
+        "tp": 3778,
+        "fp": 147,
+        "fn": 953,
+        "timing_errors": [],
+        "precision": 0.9625477707006369,
+        "recall": 0.79856267173959,
+        "f1_score": 0.8729205175600739
+      },
+      "side_stick": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1747,
+        "timing_errors": [],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0
+      },
+      "ride_bell": {
+        "tp": 185,
+        "fp": 1,
+        "fn": 2,
+        "timing_errors": [],
+        "precision": 0.9946236559139785,
+        "recall": 0.9893048128342246,
+        "f1_score": 0.9919571045576406
+      },
+      "hihat_open": {
+        "tp": 307,
+        "fp": 29,
+        "fn": 5,
+        "timing_errors": [],
+        "precision": 0.9136904761904762,
+        "recall": 0.9839743589743589,
+        "f1_score": 0.9475308641975307
+      }
+    },
+    "total_files": 51,
+    "overall": {
+      "precision": 0.9050473186119874,
+      "recall": 0.721942627075994,
+      "f1_score": 0.8031914893617021,
+      "true_positives": 28690,
+      "false_positives": 3010,
+      "false_negatives": 11050
+    }
+  },
+  "refined": {
+    "per_class": {
+      "snare_head": {
+        "tp": 5009,
+        "fp": 555,
+        "fn": 2480,
+        "timing_errors": [],
+        "precision": 0.9002516175413372,
+        "recall": 0.6688476432100414,
+        "f1_score": 0.7674864015935035
+      },
+      "high_mid_tom": {
+        "tp": 1778,
+        "fp": 221,
+        "fn": 370,
+        "timing_errors": [],
+        "precision": 0.8894447223611806,
+        "recall": 0.8277467411545624,
+        "f1_score": 0.857487340245961
+      },
+      "floor_tom": {
+        "tp": 2693,
+        "fp": 244,
+        "fn": 694,
+        "timing_errors": [],
+        "precision": 0.9169220292815798,
+        "recall": 0.7950989075878359,
+        "f1_score": 0.8516761543327009
+      },
+      "kick": {
+        "tp": 7813,
+        "fp": 814,
+        "fn": 956,
+        "timing_errors": [],
+        "precision": 0.9056450678103628,
+        "recall": 0.8909795871821188,
+        "f1_score": 0.8982524718326051
+      },
+      "snare_rim": {
+        "tp": 2287,
+        "fp": 2158,
+        "fn": 367,
+        "timing_errors": [],
+        "precision": 0.5145106861642295,
+        "recall": 0.8617181612660135,
+        "f1_score": 0.6443161008592758
+      },
+      "ride": {
+        "tp": 2723,
+        "fp": 440,
+        "fn": 1043,
+        "timing_errors": [],
+        "precision": 0.8608915586468543,
+        "recall": 0.7230483271375465,
+        "f1_score": 0.7859720017318517
+      },
+      "crash": {
+        "tp": 165,
+        "fp": 353,
+        "fn": 29,
+        "timing_errors": [],
+        "precision": 0.3185328185328185,
+        "recall": 0.8505154639175257,
+        "f1_score": 0.46348314606741564
+      },
+      "hihat_pedal": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 4356,
+        "timing_errors": [],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0
+      },
+      "hihat_closed": {
+        "tp": 3376,
+        "fp": 549,
+        "fn": 1355,
+        "timing_errors": [],
+        "precision": 0.8601273885350319,
+        "recall": 0.7135912069329952,
+        "f1_score": 0.7800369685767098
+      },
+      "side_stick": {
+        "tp": 0,
+        "fp": 0,
+        "fn": 1747,
+        "timing_errors": [],
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0
+      },
+      "ride_bell": {
+        "tp": 156,
+        "fp": 30,
+        "fn": 31,
+        "timing_errors": [],
+        "precision": 0.8387096774193549,
+        "recall": 0.8342245989304813,
+        "f1_score": 0.836461126005362
+      },
+      "hihat_open": {
+        "tp": 291,
+        "fp": 45,
+        "fn": 21,
+        "timing_errors": [],
+        "precision": 0.8660714285714286,
+        "recall": 0.9326923076923077,
+        "f1_score": 0.8981481481481481
+      }
+    },
+    "total_files": 51,
+    "overall": {
+      "precision": 0.8293690851735016,
+      "recall": 0.6615752390538501,
+      "f1_score": 0.7360302351623741,
+      "true_positives": 26291,
+      "false_positives": 5409,
+      "false_negatives": 13449
+    }
+  },
+  "config": {
+    "tolerance": 0.05,
+    "max_files": 100,
+    "test_files_evaluated": 51
+  }
+}
